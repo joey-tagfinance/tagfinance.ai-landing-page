@@ -78,8 +78,8 @@
     </div>
 
     <script>
-        // *** This is the correct Google Form Submission URL, extracted from your inspection ***
-        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLScyVuZczUWmRkGXs66QFGp7PoWzhTdLdTt2e-4lEEBmW4zWpw/formResponse'; 
+        // FIX APPLIED: Removed the '/u/0/' from the URL to make the endpoint more reliable.
+        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScyVuZczUWmRkGXs66QFGp7PoWzhTdLdTt2e-4lEEBmW4zWpw/formResponse'; 
 
         const form = document.getElementById('betaSignupForm');
         const thankYouMessage = document.getElementById('thankYouMessage');
