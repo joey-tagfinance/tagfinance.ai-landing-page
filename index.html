@@ -48,9 +48,9 @@
         </ul>
 
         <!-- Lead Form -->
-        <!-- CRITICAL FIX: Changed the form to submit to the hidden iframe for reliable Google Form submission -->
+        <!-- CRITICAL FIX: Corrected the final characters of the form ID from Zpw to Wpw -->
         <form id="betaSignupForm" class="space-y-4" 
-              action="https://docs.google.com/forms/d/e/1FAIpQLScyVuZczUWmRkGXs66QFGp7PoWzhTdLdTt2e-4lEEBmW4zZpw/formResponse" 
+              action="https://docs.google.com/forms/d/e/1FAIpQLScyVuZczUWmRkGXs66QFGp7PoWzhTdLdTt2e-4lEEBmW4z**Wpw**/formResponse" 
               method="POST" 
               target="hidden_iframe" 
               onsubmit="formSubmitted()">
@@ -83,7 +83,6 @@
     </div>
 
     <!-- Hidden Iframe for reliable submission (required for Google Forms) -->
-    <!-- FIX: Removed the unreliable inline 'onload' handler, now handled in script block -->
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
     <script>
@@ -91,7 +90,6 @@
         const thankYouMessage = document.getElementById('thankYouMessage');
         const hiddenIframe = document.getElementById('hidden_iframe');
 
-        // Changed back to 'let' as it's now correctly scoped within the script block
         let submitted = false; 
 
         // Function called when the form is submitted (triggers the browser POST to the hidden iframe)
@@ -109,9 +107,9 @@
             }
         }
         
-        // FIX: Attach the load event listener directly via JavaScript.
-        // This ensures the handler runs in the correct scope and can access the 'submitted' flag.
+        // Attach the load event listener directly via JavaScript.
         hiddenIframe.addEventListener('load', formSubmittedSuccess);
     </script>
 </body>
 </html>
+
