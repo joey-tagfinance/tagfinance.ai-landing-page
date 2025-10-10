@@ -47,7 +47,13 @@
             </li>
         </ul>
 
-        <!-- Lead Form --><form id="betaSignupForm" class="space-y-4">
+        <!-- Lead Form -->
+        <!-- CRITICAL FIX: Changed the form to submit to the hidden iframe for reliable Google Form submission -->
+        <form id="betaSignupForm" class="space-y-4" 
+              action="https://docs.google.com/forms/d/e/1FAIpQLScyVuZczUWmRkGXs66QFGp7PoWzhTdLdTt2e-4lEEBmW4zZpw/formResponse" 
+              method="POST" 
+              target="hidden_iframe" 
+              onsubmit="formSubmitted()">
             <p class="text-center text-lg text-gray-800 font-bold bg-yellow-50 p-3 rounded-lg border border-yellow-200">
                 🚀 Join the Private Beta (Free for first 10 chapters)
             </p>
@@ -74,45 +80,38 @@
         <div id="thankYouMessage" class="hidden mt-6 bg-green-50 border border-green-300 text-green-800 p-4 rounded-lg text-center font-semibold">
             Thank you! Your spot is reserved. Check your linked Google Sheet for your entry.
         </div>
-
     </div>
 
-    <script>
-        // FIX APPLIED: Removed the '/u/0/' from the URL to make the endpoint more reliable.
-        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScyVuZczUWmRkGXs66QFGp7PoWzhTdLdTt2e-4lEEBmW4zWpw/formResponse'; 
+    <!-- Hidden Iframe for reliable submission (required for Google Forms) -->
+    <!-- FIX: Removed the unreliable inline 'onload' handler, now handled in script block -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
+    <script>
         const form = document.getElementById('betaSignupForm');
         const thankYouMessage = document.getElementById('thankYouMessage');
+        const hiddenIframe = document.getElementById('hidden_iframe');
 
-        // Function to submit the form data to Google Sheets via the Google Form endpoint
-        const submitLead = async (event) => {
-            event.preventDefault();
+        // Changed back to 'let' as it's now correctly scoped within the script block
+        let submitted = false; 
 
-            // Collects all data from the form inputs
-            const data = new FormData(form);
-            const dataQueryString = new URLSearchParams(data).toString();
+        // Function called when the form is submitted (triggers the browser POST to the hidden iframe)
+        function formSubmitted() {
+            submitted = true;
+            // The browser takes care of the submission now. We just wait for the iframe to load.
+        }
 
-            try {
-                // Submit the data as a POST request to the Google Form endpoint
-                await fetch(GOOGLE_FORM_URL, {
-                    method: 'POST',
-                    body: dataQueryString,
-                    mode: 'no-cors' // Required for cross-domain form submissions to Google Forms
-                });
-
+        // Function called when the hidden iframe successfully loads the form response page
+        function formSubmittedSuccess() {
+            if (submitted) {
                 // Success feedback: Hide form, show thank you message
                 form.classList.add('hidden');
                 thankYouMessage.classList.remove('hidden');
-
-            } catch (error) {
-                console.error("Error submitting lead:", error);
-                thankYouMessage.textContent = "Submission failed. Please check the console for errors.";
-                thankYouMessage.classList.remove('hidden', 'bg-green-50', 'text-green-800');
-                thankYouMessage.classList.add('bg-red-50', 'text-red-800');
             }
-        };
-
-        form.addEventListener('submit', submitLead);
+        }
+        
+        // FIX: Attach the load event listener directly via JavaScript.
+        // This ensures the handler runs in the correct scope and can access the 'submitted' flag.
+        hiddenIframe.addEventListener('load', formSubmittedSuccess);
     </script>
 </body>
 </html>
