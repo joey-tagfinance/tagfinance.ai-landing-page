@@ -48,15 +48,21 @@
         </ul>
 
         <!-- Lead Form -->
-        <!-- CRITICAL FIX: Corrected the final characters of the form ID from Zpw to Wpw -->
         <form id="betaSignupForm" class="space-y-4" 
-              action="https://docs.google.com/forms/d/e/1FAIpQLScyVuZczUWmRkGXs66QFGp7PoWzhTdLdTt2e-4lEEBmW4z**Wpw**/formResponse" 
+              action="https://docs.google.com/forms/d/e/1FAIpQLScyVuZczUWmRkGXs66QFGp7PoWzhTdLdTt2e-4lEEBmW4zWpw/formResponse" 
               method="POST" 
               target="hidden_iframe" 
               onsubmit="formSubmitted()">
             <p class="text-center text-lg text-gray-800 font-bold bg-yellow-50 p-3 rounded-lg border border-yellow-200">
                 🚀 Join the Private Beta (Free for first 10 chapters)
             </p>
+            
+            <!-- Hidden Fields for Google Form validation (CRITICAL FIX) -->
+            <input type="hidden" name="fvv" value="1">
+            <input type="hidden" name="pageHistory" value="0">
+            <input type="hidden" name="fbzx" value="-2254061322292917238">
+            <!-- End Hidden Fields -->
+
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
                 <!-- Field ID for 'Your Name' -->
@@ -112,4 +118,3 @@
     </script>
 </body>
 </html>
-
