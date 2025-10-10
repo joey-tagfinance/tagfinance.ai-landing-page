@@ -53,18 +53,18 @@
             </p>
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
-                <!-- **STEP 3: Replace entry.123456 with your actual Google Form field ID for NAME** -->
-                <input type="text" id="name" name="entry.123456" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#1e3a8a] focus:border-[#1e3a8a] sm:text-sm">
+                <!-- Field ID for 'Your Name' -->
+                <input type="text" id="name" name="entry.283782336" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#1e3a8a] focus:border-[#1e3a8a] sm:text-sm">
             </div>
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">School/Chapter Email (Required)</label>
-                <!-- **STEP 3: Replace entry.789012 with your actual Google Form field ID for EMAIL** -->
-                <input type="email" id="email" name="entry.789012" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#1e3a8a] focus:border-[#1e3a8a] sm:text-sm">
+                <!-- Field ID for 'School/Chapter Email (required)' -->
+                <input type="email" id="email" name="entry.1916032253" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#1e3a8a] focus:border-[#1e3a8a] sm:text-sm">
             </div>
             <div>
                 <label for="chapter" class="block text-sm font-medium text-gray-700">Chapter/University</label>
-                <!-- **STEP 3: Replace entry.345678 with your actual Google Form field ID for CHAPTER** -->
-                <input type="text" id="chapter" name="entry.345678" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#1e3a8a] focus:border-[#1e3a8a] sm:text-sm">
+                <!-- Field ID for 'Chapter/University' -->
+                <input type="text" id="chapter" name="entry.14303573" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#1e3a8a] focus:border-[#1e3a8a] sm:text-sm">
             </div>
             <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-bold text-white bg-[#1e3a8a] hover:bg-[#152e69] focus:outline-none focus:ring-2 focus:ring-offset-2 focus-ring transition duration-150 ease-in-out">
                 Secure My Spot
@@ -78,8 +78,8 @@
     </div>
 
     <script>
-        // *** STEP 3: REPLACE THIS URL with your actual Google Form submission URL (the one from the form's action attribute) ***
-        const GOOGLE_FORM_URL = 'YOUR_GOOGLE_FORM_SUBMISSION_URL'; 
+        // *** This is the correct Google Form Submission URL, extracted from your inspection ***
+        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLScyVuZczUWmRkGXs66QFGp7PoWzhTdLdTt2e-4lEEBmW4zWpw/formResponse'; 
 
         const form = document.getElementById('betaSignupForm');
         const thankYouMessage = document.getElementById('thankYouMessage');
@@ -88,35 +88,25 @@
         const submitLead = async (event) => {
             event.preventDefault();
 
-            if (GOOGLE_FORM_URL === 'YOUR_GOOGLE_FORM_SUBMISSION_URL') {
-                console.error("FATAL ERROR: GOOGLE_FORM_URL is not set. Please update the URL in the <script> block.");
-                thankYouMessage.textContent = "Error: Please update the form URL in the code.";
-                thankYouMessage.classList.remove('hidden', 'bg-green-50', 'text-green-800');
-                thankYouMessage.classList.add('bg-red-50', 'text-red-800');
-                return;
-            }
-
+            // Collects all data from the form inputs
             const data = new FormData(form);
-            
-            // Note: Data is sent as form-urlencoded, not JSON
             const dataQueryString = new URLSearchParams(data).toString();
 
             try {
-                // Use the Google Form submission endpoint
-                // We use 'no-cors' mode because Google Forms is a third-party endpoint
-                const response = await fetch(GOOGLE_FORM_URL, {
+                // Submit the data as a POST request to the Google Form endpoint
+                await fetch(GOOGLE_FORM_URL, {
                     method: 'POST',
                     body: dataQueryString,
-                    mode: 'no-cors' 
+                    mode: 'no-cors' // Required for cross-domain form submissions to Google Forms
                 });
 
-                // Success feedback (The response object is unusable in 'no-cors' mode, so we assume success if no fetch error)
+                // Success feedback: Hide form, show thank you message
                 form.classList.add('hidden');
                 thankYouMessage.classList.remove('hidden');
 
             } catch (error) {
                 console.error("Error submitting lead:", error);
-                thankYouMessage.textContent = "Submission failed. Please check the console for errors and ensure the Google Form URL is correct.";
+                thankYouMessage.textContent = "Submission failed. Please check the console for errors.";
                 thankYouMessage.classList.remove('hidden', 'bg-green-50', 'text-green-800');
                 thankYouMessage.classList.add('bg-red-50', 'text-red-800');
             }
