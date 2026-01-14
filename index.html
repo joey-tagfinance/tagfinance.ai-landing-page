@@ -116,5 +116,54 @@
         // Attach the load event listener directly via JavaScript.
         hiddenIframe.addEventListener('load', formSubmittedSuccess);
     </script>
+    <div id="ai-chat-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: sans-serif;">
+    <button id="chat-button" onclick="toggleChat()" style="background: #007bff; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 24px;">💬</button>
+    
+    <div id="chat-window" style="display: none; width: 350px; height: 450px; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); flex-direction: column; overflow: hidden; margin-bottom: 10px;">
+        <div style="background: #007bff; color: white; padding: 15px; font-weight: bold;">TagFinance Treasurer AI</div>
+        <div id="chat-messages" style="flex: 1; padding: 15px; overflow-y: auto; font-size: 14px; background: #f9f9f9;"></div>
+        <div style="padding: 10px; border-top: 1px solid #eee; display: flex;">
+            <input type="text" id="user-input" placeholder="Ask a question..." style="flex: 1; border: 1px solid #ddd; padding: 8px; border-radius: 4px; outline: none;">
+            <button onclick="sendMessage()" style="background: #007bff; color: white; border: none; padding: 8px 15px; margin-left: 5px; border-radius: 4px; cursor: pointer;">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const chatWindow = document.getElementById('chat-window');
+    const messagesContainer = document.getElementById('chat-messages');
+
+    function toggleChat() {
+        chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById('user-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Display User Message
+        messagesContainer.innerHTML += `<div style="margin-bottom: 10px; text-align: right;"><span style="background: #007bff; color: white; padding: 8px 12px; border-radius: 15px; display: inline-block;">${text}</span></div>`;
+        input.value = '';
+
+        try {
+            // CHANGE THIS URL to your Cloudflare Worker URL
+            const response = await fetch('https://treasurer.tagfinance.ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            
+            const data = await response.json();
+            const reply = data.response || "Sorry, I'm having trouble connecting.";
+
+            // Display AI Response
+            messagesContainer.innerHTML += `<div style="margin-bottom: 10px;"><span style="background: #e9e9eb; color: black; padding: 8px 12px; border-radius: 15px; display: inline-block;">${reply}</span></div>`;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        } catch (err) {
+            messagesContainer.innerHTML += `<div style="color: red; font-size: 12px;">Error: Could not connect to the agent.</div>`;
+        }
+    }
+</script>
 </body>
 </html>
